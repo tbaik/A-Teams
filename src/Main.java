@@ -1,11 +1,55 @@
+import java.io.File;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
+		Scanner sc = new Scanner(new File("input.txt"));
+		
+		//get inputs from input file
+		HashSet<Node> nodes = new HashSet<Node>();
+		while(sc.hasNextLine()){
+			String nextLine = sc.nextLine();
+			if(nextLine.trim().equals("*"))
+				break;
+			nodes.add(new Node(nextLine.trim()));
+		}
+
+		HashSet<Node> startNodes = new HashSet<Node>();
+		while(sc.hasNextLine()){
+			String nextLine = sc.nextLine();
+			if(nextLine.trim().equals("*"))
+				break;
+			startNodes.add(new Node(nextLine.trim()));
+		}
+
+		HashSet<Node> endNodes = new HashSet<Node>();
+		while(sc.hasNextLine()){
+			String nextLine = sc.nextLine();
+			if(nextLine.trim().equals("*"))
+				break;
+			endNodes.add(new Node(nextLine.trim()));
+		}
+		
+		HashSet<Edge> edges = new HashSet<Edge>();
+		while(sc.hasNextLine()){
+			String nextLine = sc.nextLine();
+			Scanner lineScanner = new Scanner(nextLine);
+			
+			edges.add(new Edge(new Node(lineScanner.next().trim()), new Node(lineScanner.next().trim()), lineScanner.nextInt()));
+		}
+		
+		//Hashmap that holds the results of Floyd-Warshall's shortest paths algorithm
+		HashMap<Edge, Integer> sPathMap = new HashMap<Edge, Integer>();
+		
+
 		// l represents how many shared memory objects we have
 		int l = 10;
 		// j represents how many solutions each memory can have
 		int j = 100;
+		
 		//however long we should run the program
 		int secondsToRun = 15;
 		if (args.length >= 2) {
@@ -43,7 +87,7 @@ public class Main {
 			//run our heuristic and get a new solution
 			Solution improvedSol = null;
 			//destroy a random by replacing our new solution in here.
-			sharedMem.getMemoryArray()[memoryIndex].getSolutions().set(0, null);
+			sharedMem.getMemoryArray()[memoryIndex].getSolutions().set(0, improvedSol);
 			
 			if(improvedSol != null && improvedSol.getTotalCost() < bestSol.getTotalCost()){
 				bestSol = improvedSol;
