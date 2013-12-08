@@ -98,7 +98,7 @@ public class Main {
 				//here we want to call one of the constructors to create a solution and add it
 				
 				//then we write it into the memory index
-				sharedMem.getMemoryArray()[i] = null;
+				sharedMem.getMemoryArray()[i].getSolutions().add(null);
 			}
 		}
 		
@@ -109,14 +109,14 @@ public class Main {
 			//get a random improvement heuristic
 			
 			
-			int memoryIndex = new Random(l).nextInt();
+			int memoryIndex = new Random().nextInt(l);
 			
 			Solution solToImprove = sharedMem.getMemoryArray()[memoryIndex].getRandomSolution();
 			
 			//run our heuristic and get a new solution
 			Solution improvedSol = null;
 			//destroy a random by replacing our new solution in here.
-			sharedMem.getMemoryArray()[memoryIndex].getSolutions().set(0, improvedSol);
+			sharedMem.getMemoryArray()[memoryIndex].write(improvedSol);
 			
 			if(improvedSol != null && improvedSol.getTotalCost() < bestSol.getTotalCost()){
 				bestSol = improvedSol;

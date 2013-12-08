@@ -8,10 +8,6 @@ public class SharedMemory {
 		for(int i = 0; i < size; i++)
 			memoryArr[i] = new Memory(memoryCapacity);
 	}
-	//gets us a random Memory object to work in
-	public Memory getRandomMemory(){
-		return memoryArr[new Random(memoryArr.length).nextInt()];
-	}
 	
 	public Memory[] getMemoryArray(){
 		return memoryArr;

@@ -20,6 +20,15 @@ public class Memory {
 	}
 	
 	public Solution getRandomSolution(){
-		return solutions.get(new Random(memCapacity).nextInt());
+		return solutions.get(new Random().nextInt(memCapacity));
+	}
+
+	public void write(Solution improvedSol) {
+		// test to see if this solution is worse than worst solution,
+		// if it is, just return
+		
+		// choose a random one to replace using roulette rule (higher score => more likely to be removed)
+		
+		// replace now
 	}
 }
