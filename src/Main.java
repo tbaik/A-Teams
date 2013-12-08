@@ -33,18 +33,47 @@ public class Main {
 			endNodes.add(new Node(nextLine.trim()));
 		}
 		
-		HashSet<Edge> edges = new HashSet<Edge>();
+		HashMap<Edge, Edge> edges = new HashMap<Edge, Edge>();
 		while(sc.hasNextLine()){
 			String nextLine = sc.nextLine();
 			Scanner lineScanner = new Scanner(nextLine);
-			
-			edges.add(new Edge(new Node(lineScanner.next().trim()), new Node(lineScanner.next().trim()), lineScanner.nextInt()));
+			Edge e = new Edge(new Node(lineScanner.next().trim()), new Node(lineScanner.next().trim()), lineScanner.nextInt());
+			edges.put(e, e);
 		}
 		
 		//Hashmap that holds the results of Floyd-Warshall's shortest paths algorithm
-		HashMap<Edge, Integer> sPathMap = new HashMap<Edge, Integer>();
-		
+		HashMap<Edge, Edge> sPathMap = new HashMap<Edge, Edge>();
+		for(Node e1 : nodes)
+			for(Node e2 : nodes)
+				sPathMap.put(new Edge(e1, e2, Integer.MAX_VALUE), new Edge(e1, e2, Integer.MAX_VALUE));
+		for(Node e1 : nodes){
+			sPathMap.put(new Edge(e1, e1, 0), new Edge(e1, e1, 0));
+		}
+		for(Edge e : edges.keySet()){
+			sPathMap.put(e, e);
+		}
 
+		for(Node e1 : nodes)
+			for(Node e2 : nodes)
+				for(Node e3 : nodes)
+				{
+					int directCost = sPathMap.get(new Edge(e2, e3, -1)).getCost();
+					int firstCost = sPathMap.get(new Edge(e2, e1, -1)).getCost();
+					int secCost = sPathMap.get(new Edge(e1, e3, -1)).getCost();
+					//adding 2 ints might give overflow, just skip over it for now by doing this check...
+					if(firstCost == Integer.MAX_VALUE || secCost == Integer.MAX_VALUE)
+						continue;
+					if(directCost > (firstCost + secCost)){
+						sPathMap.put(new Edge(e2, e3, (firstCost + secCost)), new Edge(e2, e3, (firstCost + secCost)));
+					}
+				}
+
+//		for(Edge e : sPathMap.values()){
+//			System.out.println(e.getFrom().getName() + " " + e.getTo().getName() + " " + e.getCost());
+//		}
+		
+		
+		
 		// l represents how many shared memory objects we have
 		int l = 10;
 		// j represents how many solutions each memory can have
