@@ -128,7 +128,7 @@ public class Main {
 
 	//creates a random solution from given edges, sources, and destination (making sure no loops exist)
 	private static Solution createRandomSolution(HashSet<Node> startNodes, HashSet<Node> endNodes, HashMap<Edge, Edge> edges) {
-		Solution sol = new Solution(null);
+		Solution sol = new Solution();
 		
 		//put end nodes in an array so we can remove each randomly chosen one.
 		ArrayList<Node> endNodesArr = new ArrayList<Node>();

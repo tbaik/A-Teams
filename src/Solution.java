@@ -6,26 +6,23 @@ public class Solution {
 	private HashSet<Edge> edges = new HashSet<Edge>();
 	private ArrayList<Path> paths = new ArrayList<Path>();
 
-	public Solution(HashSet<Edge> edges) {
-		this.edges = edges;
-		if(edges == null){
-			edges = new HashSet<Edge>();
-		}
+	public Solution() {
 	}
-	
+
 	public int getTotalCost() {
 		int totalCost = 0;
-		if (edges != null){
+		if (edges != null) {
 			for (Edge e : edges)
 				totalCost += e.getCost();
-		}else
+		} else
 			totalCost = Integer.MAX_VALUE;
 		return totalCost;
 	}
-	
-	public void addEdges(Collection<Edge> edges){
-		for(Edge e : edges){
-			//only adds if it's not present, so we can just add wihtout checking here.
+
+	public void addEdges(Collection<Edge> edges) {
+		for (Edge e : edges) {
+			// only adds if it's not present, so we can just add wihtout
+			// checking here.
 			this.edges.add(e);
 		}
 	}
@@ -33,9 +30,11 @@ public class Solution {
 	public HashSet<Edge> getEdges() {
 		return edges;
 	}
-	
-	public void addPath(Path e){
-		this.paths.add(e);
-	}
 
+	public void addPath(Path e) {
+		this.paths.add(e);
+		for (Edge pEdge : e.getPaths()) {
+			edges.add(pEdge);
+		}
+	}
 }
