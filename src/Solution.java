@@ -19,14 +19,6 @@ public class Solution {
 		return totalCost;
 	}
 
-	public void addEdges(Collection<Edge> edges) {
-		for (Edge e : edges) {
-			// only adds if it's not present, so we can just add wihtout
-			// checking here.
-			this.edges.add(e);
-		}
-	}
-
 	public HashSet<Edge> getEdges() {
 		return edges;
 	}
