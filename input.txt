@@ -26,3 +26,5 @@ F G 2
 F I 1
 G H 2
 I H 3
+D C 2
+D E 2

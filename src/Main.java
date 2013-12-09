@@ -1,6 +1,9 @@
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -77,7 +80,7 @@ public class Main {
 		// l represents how many shared memory objects we have
 		int l = 10;
 		// j represents how many solutions each memory can have
-		int j = 100;
+		int j = 20;
 		
 		//however long we should run the program
 		int secondsToRun = 15;
@@ -96,14 +99,13 @@ public class Main {
 				if(k > sharedMem.getMemoryArray()[i].getMemCapacity())
 					throw new Exception("Created too many solutions...");
 				//here we want to call one of the constructors to create a solution and add it
-				
+				Solution solution = createRandomSolution(startNodes, endNodes, edges);
 				//then we write it into the memory index
-				sharedMem.getMemoryArray()[i].getSolutions().add(null);
+				sharedMem.getMemoryArray()[i].getSolutions().add(solution);
 			}
 		}
 		
 		Solution bestSol = new Solution(null);
-		bestSol.setTotalCost(Integer.MAX_VALUE);
 		long timeToRunUntil = System.currentTimeMillis() + secondsToRun * 1000;
 		while(System.currentTimeMillis() < timeToRunUntil){
 			//get a random improvement heuristic
@@ -122,5 +124,27 @@ public class Main {
 				bestSol = improvedSol;
 			}
 		}
+	}
+
+	//creates a random solution from given edges, sources, and destination (making sure no loops exist)
+	private static Solution createRandomSolution(HashSet<Node> startNodes, HashSet<Node> endNodes, HashMap<Edge, Edge> edges) {
+		Solution sol = new Solution(null);
+		
+		//put end nodes in an array so we can remove each randomly chosen one.
+		ArrayList<Node> endNodesArr = new ArrayList<Node>();
+		for(Node e : endNodes){
+			endNodesArr.add(e);
+		}
+		
+		//for each source node, choose a random end node and find a path to it.
+		for(Node e : startNodes){
+			int index = new Random().nextInt(endNodesArr.size());
+			Node dest = endNodesArr.get(index);
+			endNodesArr.remove(index);
+			
+			
+		}
+		
+		return sol;
 	}
 }
