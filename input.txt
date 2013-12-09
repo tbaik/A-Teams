@@ -21,7 +21,7 @@ B E 3
 E F 2
 D F 2
 C F 3
-C G 2
+C G 3
 F G 2
 F I 1
 G H 2

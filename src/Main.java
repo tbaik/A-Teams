@@ -46,41 +46,63 @@ public class Main {
 
 		// Hashmap that holds the results of Floyd-Warshall's shortest paths
 		// algorithm
-		HashMap<Edge, Edge> sPathMap = new HashMap<Edge, Edge>();
+		HashMap<Edge, Edge> sValuesMap = new HashMap<Edge, Edge>();
+		// this Hashmap keeps all the shortest paths actually used not just the
+		// values
+		HashMap<Edge, HashSet<Edge>> sPathMap = new HashMap<Edge, HashSet<Edge>>();
 		for (Node e1 : nodes)
-			for (Node e2 : nodes)
-				sPathMap.put(new Edge(e1, e2, Integer.MAX_VALUE), new Edge(e1, e2, Integer.MAX_VALUE));
+			for (Node e2 : nodes) {
+				sValuesMap.put(new Edge(e1, e2, Integer.MAX_VALUE), new Edge(e1, e2, Integer.MAX_VALUE));
+				HashSet<Edge> hs = new HashSet<Edge>();
+				hs.add(new Edge(e1, e2, -1));
+				sPathMap.put(new Edge(e1, e2, 0), hs);
+			}
 		for (Node e1 : nodes) {
-			sPathMap.put(new Edge(e1, e1, 0), new Edge(e1, e1, 0));
+			sValuesMap.put(new Edge(e1, e1, 0), new Edge(e1, e1, 0));
 		}
 		for (Edge e : edges.keySet()) {
-			sPathMap.put(e, e);
+			sValuesMap.put(e, e);
 		}
 
 		for (Node e1 : nodes)
 			for (Node e2 : nodes)
 				for (Node e3 : nodes) {
-					int directCost = sPathMap.get(new Edge(e2, e3, -1)).getCost();
-					int firstCost = sPathMap.get(new Edge(e2, e1, -1)).getCost();
-					int secCost = sPathMap.get(new Edge(e1, e3, -1)).getCost();
+					int directCost = sValuesMap.get(new Edge(e2, e3, -1)).getCost();
+					int firstCost = sValuesMap.get(new Edge(e2, e1, -1)).getCost();
+					int secCost = sValuesMap.get(new Edge(e1, e3, -1)).getCost();
 					// adding 2 ints might give overflow, just skip over it for
 					// now by doing this check...
 					if (firstCost == Integer.MAX_VALUE || secCost == Integer.MAX_VALUE)
 						continue;
 					if (directCost > (firstCost + secCost)) {
-						sPathMap.put(new Edge(e2, e3, (firstCost + secCost)), new Edge(e2, e3, (firstCost + secCost)));
+						sValuesMap.put(new Edge(e2, e3, (firstCost + secCost)), new Edge(e2, e3, (firstCost + secCost)));
+						for (HashSet<Edge> e : sPathMap.values()) {
+							if (e.contains(new Edge(e2, e3, -1))) {
+								e.remove(new Edge(e2, e3, -1));
+								if (sPathMap.containsKey(new Edge(e2, e1, -1)))
+									e.addAll(sPathMap.get(new Edge(e2, e1, -1)));
+								else
+									e.add(new Edge(e2, e1, -1));
+								if (sPathMap.containsKey(new Edge(e1, e3, -1)))
+									e.addAll(sPathMap.get(new Edge(e1, e3, -1)));
+								else
+									e.add(new Edge(e1, e3, -1));
+							}
+						}
 					}
 				}
 
-		// for(Edge e : sPathMap.values()){
-		// System.out.println(e.getFrom().getName() + " " + e.getTo().getName()
-		// + " " + e.getCost());
-		// }
+//		for (Edge e : sValuesMap.values()) {
+//			System.out.println(e.getFrom().getName() + " " + e.getTo().getName() + " " + e.getCost());
+//			for (Edge e1 : sPathMap.get(e)) {
+//				System.out.println(e1);
+//			}
+//		}
 
 		// l represents how many shared memory objects we have
 		int l = 5;
 		// j represents how many solutions each memory can have
-		int j = 10;
+		int j = 20;
 
 		// however long we should run the program
 		int secondsToRun = 5;
@@ -107,7 +129,7 @@ public class Main {
 		}
 
 		calcAndPrintSharedMemoryCost(sharedMem);
-		
+
 		Solution bestSol = new Solution();
 		long timeToRunUntil = System.currentTimeMillis() + secondsToRun * 1000;
 		while (System.currentTimeMillis() < timeToRunUntil) {
@@ -126,7 +148,7 @@ public class Main {
 				bestSol = improvedSol;
 			}
 		}
-		
+
 		calcAndPrintSharedMemoryCost(sharedMem);
 	}
 
@@ -192,7 +214,6 @@ public class Main {
 		}
 		return path;
 	}
-	
 
 	private static void calcAndPrintSharedMemoryCost(SharedMemory sharedMem) {
 		int cost = 0;
