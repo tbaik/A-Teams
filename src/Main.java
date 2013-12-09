@@ -43,7 +43,7 @@ public class Main {
 			Edge e = new Edge(new Node(lineScanner.next().trim()), new Node(lineScanner.next().trim()), lineScanner.nextInt());
 			edges.put(e, e);
 		}
-		
+
 		//Hashmap that holds the results of Floyd-Warshall's shortest paths algorithm
 		HashMap<Edge, Edge> sPathMap = new HashMap<Edge, Edge>();
 		for(Node e1 : nodes)
@@ -78,7 +78,7 @@ public class Main {
 		
 		
 		// l represents how many shared memory objects we have
-		int l = 10;
+		int l = 5;
 		// j represents how many solutions each memory can have
 		int j = 20;
 		
@@ -100,12 +100,14 @@ public class Main {
 					throw new Exception("Created too many solutions...");
 				//here we want to call one of the constructors to create a solution and add it
 				Solution solution = createRandomSolution(startNodes, endNodes, edges);
+
 				//then we write it into the memory index
 				sharedMem.getMemoryArray()[i].getSolutions().add(solution);
 			}
 		}
 		
-		Solution bestSol = new Solution(null);
+		Solution bestSol = new Solution();
+		
 		long timeToRunUntil = System.currentTimeMillis() + secondsToRun * 1000;
 		while(System.currentTimeMillis() < timeToRunUntil){
 			//get a random improvement heuristic
@@ -142,9 +144,51 @@ public class Main {
 			Node dest = endNodesArr.get(index);
 			endNodesArr.remove(index);
 			
+			Path path = generateRandomPath(e, dest, edges);
+			sol.addPath(path);
+		}
+
+		return sol;
+	}
+
+	private static Path generateRandomPath(Node start, Node dest, HashMap<Edge, Edge> edges) {
+		HashSet<Edge> usedEdges = new HashSet<Edge>();
+		
+		Node currentNode = start;
+		Path path = new Path();
+
+		//we want to find the set of edges that go to node we have no yet traverse..
+		while(!currentNode.equals(dest)){
+			//find all the edges we can go to
+			ArrayList<Edge> possibleEdges = new ArrayList<Edge>();
+			for(Edge e : edges.keySet())
+				if(e.getFrom().equals(currentNode) || e.getTo().equals(currentNode))
+					possibleEdges.add(e);
 			
+			//remove edges we already we used, since we don't want cycles
+			for(int i = possibleEdges.size() - 1; i >= 0; i--)
+			{
+				if(usedEdges.contains(possibleEdges.get(i)))
+					possibleEdges.remove(i);
+			}
+			
+			//if we have no more moves left, just go back to the start
+			if(possibleEdges.size() == 0 ){
+				currentNode = start;
+				path = new Path();
+				usedEdges = new HashSet<Edge>();
+			}
+			else{
+				Edge edgeToUse = possibleEdges.get(new Random().nextInt(possibleEdges.size()));
+				path.addEdge(edgeToUse);
+				if(edgeToUse.getFrom().equals(currentNode))
+					currentNode = edgeToUse.getTo();
+				else
+					currentNode = edgeToUse.getFrom();
+				usedEdges.add(edgeToUse);
+			}
 		}
 		
-		return sol;
+		return path;
 	}
 }

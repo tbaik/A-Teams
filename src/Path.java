@@ -9,7 +9,23 @@ public class Path {
 		this.pathEdges = pathEdges;
 	}
 	
+	public Path() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public ArrayList<Edge> getPaths(){
 		return this.pathEdges;
+	}
+	
+	public void addEdge(Edge e){
+		this.pathEdges.add(e);
+	}
+	
+	public String toString(){
+		String edges = "";
+		for(Edge e : getPaths()){
+			edges += e + " ** ";
+		}
+		return edges.trim().substring(0, edges.trim().length() - 2);
 	}
 }

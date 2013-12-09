@@ -37,4 +37,12 @@ public class Solution {
 			edges.add(pEdge);
 		}
 	}
+	
+	public String toString(){
+		String pathStr = "";
+		for(Path e : paths){
+			pathStr += e.toString() + "\n";
+		}
+		return pathStr;
+	}
 }

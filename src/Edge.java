@@ -38,4 +38,8 @@ public class Edge {
 	public int hashCode() {
 		return this.getFrom().getName().hashCode() + this.getTo().getName().hashCode();
 	}
+	
+	public String toString(){
+		return from.getName() + " " + to.getName();
+	}
 }
