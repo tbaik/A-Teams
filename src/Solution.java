@@ -1,9 +1,10 @@
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 
 public class Solution {
-	private HashSet<Edge> edges;
+	private HashSet<Edge> edges = new HashSet<Edge>();
+	private ArrayList<Path> paths = new ArrayList<Path>();
 
 	public Solution(HashSet<Edge> edges) {
 		this.edges = edges;
@@ -31,6 +32,10 @@ public class Solution {
 
 	public HashSet<Edge> getEdges() {
 		return edges;
+	}
+	
+	public void addPath(Path e){
+		this.paths.add(e);
 	}
 
 }
