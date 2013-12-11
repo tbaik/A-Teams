@@ -30,6 +30,10 @@ public class Solution {
 		}
 	}
 	
+	public ArrayList<Path> getPaths(){
+		return paths;
+	}
+	
 	public String toString(){
 		String pathStr = "";
 		for(Path e : paths){
