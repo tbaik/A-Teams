@@ -131,6 +131,8 @@ public class Main {
 		calcAndPrintSharedMemoryCost(sharedMem);
 
 		Solution bestSol = new Solution();
+		improveHeuristicFour(bestSol, sValuesMap, sPathMap,
+				 startNodes, endNodes);
 		long timeToRunUntil = System.currentTimeMillis() + secondsToRun * 1000;
 		while (System.currentTimeMillis() < timeToRunUntil) {
 			// get a random improvement heuristic
@@ -143,6 +145,8 @@ public class Main {
 			Solution improvedSol = createRandomSolution(startNodes, endNodes, edges);
 			// destroy a random by replacing our new solution in here.
 			sharedMem.getMemoryArray()[memoryIndex].write(improvedSol);
+			
+
 
 			if (improvedSol != null && improvedSol.getTotalCost() < bestSol.getTotalCost()) {
 				bestSol = improvedSol;
@@ -213,6 +217,32 @@ public class Main {
 			}
 		}
 		return path;
+	}
+	
+	private static Solution improveHeuristicFour(Solution sol, HashMap<Edge,Edge> sValuesMap, HashMap<Edge, HashSet<Edge>> sPathMap,
+			HashSet<Node> startNodes, HashSet<Node> endNodes) {
+		//for each source-destination pair (a,b) in s
+		for(Node n1 : startNodes)
+		{
+			for(Node n2 : endNodes)
+			{
+				for (Edge e: sValuesMap.values())
+				{
+					if(e.getFrom().getName() == n1.getName() && e.getTo().getName() == n2.getName())
+					{
+						ArrayList<Edge> tempEdges = new ArrayList<Edge>();
+						for (Edge e1 : sPathMap.get(e))
+						{
+							tempEdges.add(e1);
+						}
+						Path tempPath = new Path(tempEdges);
+					}
+				}
+				System.out.println(n1.getName() + n2.getName());
+			}
+		}
+		
+		return sol;
 	}
 
 	private static void calcAndPrintSharedMemoryCost(SharedMemory sharedMem) {
