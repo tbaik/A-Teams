@@ -15,7 +15,8 @@ public class Path {
 	}
 	
 	public Path(Node start, Node end) {
-		// TODO Auto-generated constructor stub
+		this.start = start;
+		this.end = end;
 	}
 
 	public ArrayList<Edge> getPaths(){
