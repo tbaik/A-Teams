@@ -92,12 +92,13 @@ public class Main {
 					}
 				}
 
-//		for (Edge e : sValuesMap.values()) {
-//			System.out.println(e.getFrom().getName() + " " + e.getTo().getName() + " " + e.getCost());
-//			for (Edge e1 : sPathMap.get(e)) {
-//				System.out.println(e1);
-//			}
-//		}
+		// for (Edge e : sValuesMap.values()) {
+		// System.out.println(e.getFrom().getName() + " " + e.getTo().getName()
+		// + " " + e.getCost());
+		// for (Edge e1 : sPathMap.get(e)) {
+		// System.out.println(e1);
+		// }
+		// }
 
 		// l represents how many shared memory objects we have
 		int l = 5;
@@ -105,7 +106,7 @@ public class Main {
 		int j = 20;
 
 		// however long we should run the program
-		int secondsToRun = 5;
+		int secondsToRun = 500;
 		if (args.length >= 2) {
 			l = Integer.parseInt(args[0]);
 			j = Integer.parseInt(args[1]);
@@ -131,7 +132,7 @@ public class Main {
 		calcAndPrintSharedMemoryCost(sharedMem);
 
 		Solution bestSol = new Solution();
-		long timeToRunUntil = System.currentTimeMillis() + secondsToRun * 1000;
+		long timeToRunUntil = System.currentTimeMillis() + secondsToRun;
 		while (System.currentTimeMillis() < timeToRunUntil) {
 			// get a random improvement heuristic
 
