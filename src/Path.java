@@ -2,14 +2,19 @@ import java.util.ArrayList;
 
 
 public class Path {
+	private Node start;
+	private Node end;
+	
 	//order represents path taken
 	private ArrayList<Edge> pathEdges = new ArrayList<Edge>();
 	
-	public Path(ArrayList<Edge> pathEdges){
+	public Path(ArrayList<Edge> pathEdges, Node start, Node end){
+		this.start = start;
+		this.end = end;
 		this.pathEdges = pathEdges;
 	}
 	
-	public Path() {
+	public Path(Node start, Node end) {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -27,5 +32,13 @@ public class Path {
 			edges += e + " ** ";
 		}
 		return edges.trim().substring(0, edges.trim().length() - 2);
+	}
+	
+	public Node getStart(){
+		return this.start;
+	}
+	
+	public Node getEnd(){
+		return this.end;
 	}
 }

@@ -176,7 +176,6 @@ public class Main {
 			Path path = generateRandomPath(e, dest, edges);
 			sol.addPath(path);
 		}
-
 		return sol;
 	}
 
@@ -184,7 +183,7 @@ public class Main {
 		HashSet<Edge> usedEdges = new HashSet<Edge>();
 
 		Node currentNode = start;
-		Path path = new Path();
+		Path path = new Path(start, dest);
 
 		// we want to find the set of edges that go to node we have no yet
 		// traverse..
@@ -204,7 +203,7 @@ public class Main {
 			// if we have no more moves left, just go back to the start
 			if (possibleEdges.size() == 0) {
 				currentNode = start;
-				path = new Path();
+				path = new Path(start, dest);
 				usedEdges = new HashSet<Edge>();
 			} else {
 				Edge edgeToUse = possibleEdges.get(new Random().nextInt(possibleEdges.size()));
