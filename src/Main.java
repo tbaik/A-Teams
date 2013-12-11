@@ -218,13 +218,15 @@ public class Main {
 		return path;
 	}
 	
-	private static Solution improveHeuristicFour(Solution sol, HashMap<Edge,Edge> sValuesMap, HashMap<Edge, HashSet<Edge>> sPathMap,
-			HashSet<Node> startNodes, HashSet<Node> endNodes) {
+	//Creates a new solution from an existing solution, using only shortest paths. O(pm) but it may be faster in our implementation
+	//since we run the shortest path algorithm once and just do O(1) searches instead of running the shortest path algorithm
+	//for every time this method is called.
+	private static Solution improveHeuristicFour(Solution sol, HashMap<Edge,Edge> sValuesMap, HashMap<Edge, HashSet<Edge>> sPathMap) {
 		//for each source-destination pair (a,b) in s
-		for(Node n1 : startNodes)
+		for (int i = 0; i < sol.getPaths().size(); i++)
 		{
-			for(Node n2 : endNodes)
-			{
+			Node n1 = sol.getPaths().get(i).getStart();
+			Node n2 = sol.getPaths().get(i).getEnd();
 				for (Edge e: sValuesMap.values())
 				{
 					if(e.getFrom().getName() == n1.getName() && e.getTo().getName() == n2.getName())
@@ -234,13 +236,11 @@ public class Main {
 						{
 							tempEdges.add(e1);
 						}
-						Path tempPath = new Path(tempEdges);
+						Path tempPath = new Path(tempEdges, n1, n2);
+						sol.getPaths().set(i, tempPath);
 					}
 				}
-				System.out.println(n1.getName() + n2.getName());
-			}
 		}
-		
 		return sol;
 	}
 
