@@ -105,7 +105,7 @@ public class Main {
 		int j = 20;
 
 		// however long we should run the program
-		int secondsToRun = 5;
+		int secondsToRun = 5000;
 		if (args.length >= 2) {
 			l = Integer.parseInt(args[0]);
 			j = Integer.parseInt(args[1]);
@@ -131,9 +131,8 @@ public class Main {
 		calcAndPrintSharedMemoryCost(sharedMem);
 
 		Solution bestSol = new Solution();
-		improveHeuristicFour(bestSol, sValuesMap, sPathMap,
-				 startNodes, endNodes);
-		long timeToRunUntil = System.currentTimeMillis() + secondsToRun * 1000;
+		
+		long timeToRunUntil = System.currentTimeMillis() + secondsToRun;
 		while (System.currentTimeMillis() < timeToRunUntil) {
 			// get a random improvement heuristic
 
@@ -143,6 +142,7 @@ public class Main {
 
 			// run our heuristic and get a new solution
 			Solution improvedSol = createRandomSolution(startNodes, endNodes, edges);
+//			Solution improvedSol = improveHeuristicFour(solToImprove, sValuesMap, sPathMap);
 			// destroy a random by replacing our new solution in here.
 			sharedMem.getMemoryArray()[memoryIndex].write(improvedSol);
 			
@@ -229,7 +229,7 @@ public class Main {
 			Node n2 = sol.getPaths().get(i).getEnd();
 				for (Edge e: sValuesMap.values())
 				{
-					if(e.getFrom().getName() == n1.getName() && e.getTo().getName() == n2.getName())
+					if(e.getFrom() == n1 && e.getTo() == n2)
 					{
 						ArrayList<Edge> tempEdges = new ArrayList<Edge>();
 						for (Edge e1 : sPathMap.get(e))
