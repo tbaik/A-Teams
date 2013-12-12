@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
-		Scanner sc = new Scanner(new File("input.txt"));
+		Scanner sc = new Scanner(new File("Tests" + File.separator + "tcase2.txt"));
 
 		// get inputs from input file
 		HashSet<Node> nodes = new HashSet<Node>();
@@ -92,20 +92,21 @@ public class Main {
 					}
 				}
 
-//		for (Edge e : sValuesMap.values()) {
-//			System.out.println(e.getFrom().getName() + " " + e.getTo().getName() + " " + e.getCost());
-//			for (Edge e1 : sPathMap.get(e)) {
-//				System.out.println(e1);
-//			}
-//		}
+		// for (Edge e : sValuesMap.values()) {
+		// System.out.println(e.getFrom().getName() + " " + e.getTo().getName()
+		// + " " + e.getCost());
+		// for (Edge e1 : sPathMap.get(e)) {
+		// System.out.println(e1);
+		// }
+		// }
 
 		// l represents how many shared memory objects we have
 		int l = 5;
 		// j represents how many solutions each memory can have
-		int j = 20;
+		int j = 10;
 
 		// however long we should run the program
-		int secondsToRun = 5000;
+		int secondsToRun = 2000;
 		if (args.length >= 2) {
 			l = Integer.parseInt(args[0]);
 			j = Integer.parseInt(args[1]);
@@ -131,7 +132,6 @@ public class Main {
 		calcAndPrintSharedMemoryCost(sharedMem);
 
 		Solution bestSol = new Solution();
-		
 		long timeToRunUntil = System.currentTimeMillis() + secondsToRun;
 		while (System.currentTimeMillis() < timeToRunUntil) {
 			// get a random improvement heuristic
@@ -141,12 +141,14 @@ public class Main {
 			Solution solToImprove = sharedMem.getMemoryArray()[memoryIndex].getRandomSolution();
 
 			// run our heuristic and get a new solution
-			Solution improvedSol = createRandomSolution(startNodes, endNodes, edges);
-//			Solution improvedSol = improveHeuristicFour(solToImprove, sValuesMap, sPathMap);
+			Solution improvedSol = null;
+//			 improvedSol = createRandomSolution(startNodes, endNodes, edges);
+//			if (Math.random() < .5)
+				improvedSol = Heuristics.improveHeuristicOne(solToImprove, sValuesMap, sPathMap);
+//			else
+//				improvedSol = Heuristics.improveHeuristicFour(solToImprove, sValuesMap, sPathMap);
 			// destroy a random by replacing our new solution in here.
 			sharedMem.getMemoryArray()[memoryIndex].write(improvedSol);
-			
-
 
 			if (improvedSol != null && improvedSol.getTotalCost() < bestSol.getTotalCost()) {
 				bestSol = improvedSol;
@@ -217,40 +219,23 @@ public class Main {
 		}
 		return path;
 	}
-	
-	//Creates a new solution from an existing solution, using only shortest paths. O(pm) but it may be faster in our implementation
-	//since we run the shortest path algorithm once and just do O(1) searches instead of running the shortest path algorithm
-	//for every time this method is called.
-	private static Solution improveHeuristicFour(Solution sol, HashMap<Edge,Edge> sValuesMap, HashMap<Edge, HashSet<Edge>> sPathMap) {
-		//for each source-destination pair (a,b) in s
-		for (int i = 0; i < sol.getPaths().size(); i++)
-		{
-			Node n1 = sol.getPaths().get(i).getStart();
-			Node n2 = sol.getPaths().get(i).getEnd();
-				for (Edge e: sValuesMap.values())
-				{
-					if(e.getFrom() == n1 && e.getTo() == n2)
-					{
-						ArrayList<Edge> tempEdges = new ArrayList<Edge>();
-						for (Edge e1 : sPathMap.get(e))
-						{
-							tempEdges.add(e1);
-						}
-						Path tempPath = new Path(tempEdges, n1, n2);
-						sol.getPaths().set(i, tempPath);
-					}
-				}
-		}
-		return sol;
-	}
 
 	private static void calcAndPrintSharedMemoryCost(SharedMemory sharedMem) {
 		int cost = 0;
+		int bestSolCost = Integer.MAX_VALUE;
 		for (Memory mem : sharedMem.getMemoryArray()) {
 			for (Solution sol : mem.getSolutions()) {
 				cost += sol.getTotalCost();
+				if (sol.getTotalCost() < bestSolCost){
+					bestSolCost = sol.getTotalCost();
+					System.out.println("*");
+					for(Edge e : sol.getEdges())
+						System.out.println(e);
+				}
+				
 			}
 		}
-		System.out.println(cost);
+		System.out.println("Best solution: " + bestSolCost);
+		System.out.println("Total cost of all solutions	: " + cost + "\n");
 	}
 }
