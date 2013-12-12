@@ -43,13 +43,12 @@ public class Solution {
 	}
 
 	public void replaceAndRecomputeEdges(int randomPath, Path improvedPath) {
-//		for (Edge e : paths.get(randomPath).getEdges())
-//			edges.remove(e);
-
+		for (Edge e : paths.get(randomPath).getEdges())
+			edges.remove(e);
 		paths.set(randomPath, improvedPath);
 
-//		for (Edge e1 : improvedPath.getEdges()) {
-//			edges.add(e1);
-//		}
+		for (Edge e1 : improvedPath.getEdges()) {
+			edges.add(e1);
+		}
 	}
 }

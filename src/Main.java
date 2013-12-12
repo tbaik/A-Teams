@@ -92,13 +92,13 @@ public class Main {
 					}
 				}
 
-		// for (Edge e : sValuesMap.values()) {
-		// System.out.println(e.getFrom().getName() + " " + e.getTo().getName()
-		// + " " + e.getCost());
-		// for (Edge e1 : sPathMap.get(e)) {
-		// System.out.println(e1);
-		// }
-		// }
+		 for (Edge e : sValuesMap.values()) {
+		 System.out.println(e.getFrom().getName() + " " + e.getTo().getName()
+		 + " " + e.getCost());
+		 for (Edge e1 : sPathMap.get(e)) {
+		 System.out.println(e1);
+		 }
+		 }
 
 		// l represents how many shared memory objects we have
 		int l = 5;
@@ -106,7 +106,7 @@ public class Main {
 		int j = 10;
 
 		// however long we should run the program
-		int secondsToRun = 2000;
+		int secondsToRun = 10000;
 		if (args.length >= 2) {
 			l = Integer.parseInt(args[0]);
 			j = Integer.parseInt(args[1]);
@@ -144,9 +144,9 @@ public class Main {
 			Solution improvedSol = null;
 //			 improvedSol = createRandomSolution(startNodes, endNodes, edges);
 //			if (Math.random() < .5)
-				improvedSol = Heuristics.improveHeuristicOne(solToImprove, sValuesMap, sPathMap);
+//				improvedSol = Heuristics.improveHeuristicOne(solToImprove, sValuesMap, sPathMap);
 //			else
-//				improvedSol = Heuristics.improveHeuristicFour(solToImprove, sValuesMap, sPathMap);
+				improvedSol = Heuristics.improveHeuristicFour(solToImprove, sValuesMap, sPathMap);
 			// destroy a random by replacing our new solution in here.
 			sharedMem.getMemoryArray()[memoryIndex].write(improvedSol);
 
