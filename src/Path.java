@@ -42,4 +42,12 @@ public class Path {
 	public Node getEnd(){
 		return this.end;
 	}
+	
+	public ArrayList<Edge> getEdges(){
+		return this.pathEdges;
+	}
+	
+	public void replacePath(ArrayList<Edge> pathEdges){
+		this.pathEdges = pathEdges;
+	}
 }
