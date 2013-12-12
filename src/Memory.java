@@ -43,8 +43,7 @@ public class Memory {
 			for(int j = 0; j < solutions.get(i).getTotalCost(); j++)
 				indexes.add((short)i);
 		}
-		if(indexes.size() == 0)
-			System.out.println("fuck");
+
 		// replace now
 		solutions.set(indexes.get(new Random().nextInt(indexes.size())), improvedSol);
 	}
