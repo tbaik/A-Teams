@@ -29,17 +29,27 @@ public class Solution {
 			edges.add(pEdge);
 		}
 	}
-	
-	public ArrayList<Path> getPaths(){
+
+	public ArrayList<Path> getPaths() {
 		return paths;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		String pathStr = "";
-		for(Path e : paths){
+		for (Path e : paths) {
 			pathStr += e.toString() + "\n";
 		}
 		return pathStr;
 	}
-	
+
+	public void replaceAndRecomputeEdges(int randomPath, Path improvedPath) {
+//		for (Edge e : paths.get(randomPath).getEdges())
+//			edges.remove(e);
+
+		paths.set(randomPath, improvedPath);
+
+//		for (Edge e1 : improvedPath.getEdges()) {
+//			edges.add(e1);
+//		}
+	}
 }
